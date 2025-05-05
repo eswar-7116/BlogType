@@ -8,6 +8,7 @@ export type UserDocument = HydratedDocument<{
     profileImage: string
     about: string,
     blogs: Schema.Types.ObjectId[],
+    blogCount: number
     oauthProvider: string,
     oauthId: string,
     verifyCode: string,
@@ -71,6 +72,11 @@ const UserSchema = new Schema<UserDocument>(
             default: []
         },
 
+        blogCount: {
+            type: Number,
+            default: 0,
+        },
+
         oauthProvider: {
             type: String,
             default: null
@@ -109,6 +115,11 @@ const UserSchema = new Schema<UserDocument>(
     }
 );
 
+UserSchema.methods.incrementBlogCount = function () {
+    this.blogCount += 1;
+    this.save();
+}
+
 UserSchema.pre('validate', function (next) {
     if (!this.oauthProvider && (!this.email || !this.password)) {
         this.invalidate('email', 'Email is required if OAuth is not used.');
@@ -121,7 +132,6 @@ UserSchema.pre('validate', function (next) {
 
     next();
 });
-
 
 const User = (models.User as Model<UserDocument>) || model<UserDocument>('User', UserSchema);
 

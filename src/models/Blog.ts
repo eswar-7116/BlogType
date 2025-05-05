@@ -1,4 +1,5 @@
 import { HydratedDocument, Schema, Model, model, models } from 'mongoose';
+import User from './User';
 
 export type BlogDocument = HydratedDocument<{
     blogId: string,
@@ -42,13 +43,12 @@ const BlogSchema = new Schema<BlogDocument>(
         reads: {
             type: Number,
             default: 0,
-            min: [0, 'Read Time can\'t be negative'],
         },
 
         likes: {
             type: Number,
             default: 0,
-            min: [0, 'Read Time can\'t be negative'],
+            min: [0, 'Likes can\'t be negative'],
         },
 
         tags: {
@@ -72,9 +72,23 @@ BlogSchema.methods.incrementLikes = function () {
 }
 
 BlogSchema.methods.decrementLikes = function () {
-    this.likes -= 1;
-    this.save();
+    if (this.likes > 0) {
+        this.likes -= 1;
+        this.save();
+    }
 }
+
+BlogSchema.post('save', async (blog) => {
+    try {
+        await User.findByIdAndUpdate(blog.authorId, {
+            $inc: {
+                blogCount: 1
+            }
+        });
+    } catch(error) {
+        console.error(`Failed to increment Blog Count for user, ${blog.authorId}:`, error);
+    }
+})
 
 const Blog = (models.Blog as Model<BlogDocument>) || model<BlogDocument>('Blog', BlogSchema);
 
