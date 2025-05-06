@@ -4,7 +4,7 @@ type Connection = {
   isConnected?: number;
 };
 
-const connection: Connection = {};
+export const connection: Connection = {};
 
 export default async function connectDB() {
   if (connection.isConnected) {
