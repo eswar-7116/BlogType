@@ -1,6 +1,6 @@
 import { HydratedDocument, Schema, Model, model, models } from "mongoose";
 
-export type UserDocument = HydratedDocument<{
+export type UserInf = {
   fullName: string;
   username: string;
   email: string;
@@ -15,7 +15,9 @@ export type UserDocument = HydratedDocument<{
   verifyCodeExpiry: Date;
   isVerified: boolean;
   createdAt: Date;
-}>;
+};
+
+export type UserDocument = HydratedDocument<UserInf>;
 
 const UserSchema = new Schema<UserDocument>(
   {
