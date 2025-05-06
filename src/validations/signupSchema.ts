@@ -43,7 +43,7 @@ const signupSchema = z
   .refine(
     (data) => {
       const isOAuth = data.oauthId && data.oauthProvider;
-      const isTraditional = data.email && data.password;
+      const isTraditional = data.email && data.password && data.confirmPassword;
       return isOAuth || isTraditional;
     },
     {
@@ -54,7 +54,7 @@ const signupSchema = z
     (data) => {
       if (data.password && data.confirmPassword)
         return data.password === data.confirmPassword;
-      return true;
+      return !(data.password || data.confirmPassword);
     },
     {
       message: "Passwords do not match.",
