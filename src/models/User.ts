@@ -1,25 +1,28 @@
-import { HydratedDocument, Schema, Model, model, models } from "mongoose";
+import { Schema, Types, model, models, Model } from "mongoose";
 
-export type UserInf = {
+// Define the User interface
+export interface UserInf {
   fullName: string;
   username: string;
   email: string;
   password: string;
   profileImage: string;
+  bio: string;
   about: string;
-  blogs: Schema.Types.ObjectId[];
+  blogs: Types.ObjectId[];
   blogCount: number;
   oauthProvider: string;
   oauthId: string;
-  verifyCode: string;
-  verifyCodeExpiry: Date;
   isVerified: boolean;
   createdAt: Date;
-};
+}
 
-export type UserDocument = HydratedDocument<UserInf>;
+// Define the instance methods
+interface UserMethods {
+  incrementBlogCount(): Promise<void>;
+}
 
-const UserSchema = new Schema<UserDocument>(
+const UserSchema = new Schema<UserInf, UserMethods>(
   {
     fullName: {
       type: String,
@@ -65,17 +68,23 @@ const UserSchema = new Schema<UserDocument>(
     profileImage: {
       type: String,
       trim: true,
-      default: null,
+      required: false,
+    },
+
+    bio: {
+      type: String,
+      trim: true,
+      required: false,
     },
 
     about: {
       type: String,
       trim: true,
-      default: null,
+      required: false,
     },
 
     blogs: {
-      type: [Schema.Types.ObjectId],
+      type: [Types.ObjectId],
       ref: "Blog",
       default: [],
     },
@@ -87,33 +96,13 @@ const UserSchema = new Schema<UserDocument>(
 
     oauthProvider: {
       type: String,
-      default: null,
+      required: false,
     },
 
     oauthId: {
       type: String,
-      default: null,
-      unique: true,
+      required: false,
       sparse: true,
-    },
-
-    verifyCode: {
-      type: String,
-      match: /^\d{6}$/,
-      trim: true,
-      required: [
-        function () {
-          return !this.oauthProvider;
-        },
-        "Verification Code is required",
-      ],
-      select: false,
-    },
-
-    verifyCodeExpiry: {
-      type: Date,
-      required: [true, "Verification code expiry is required"],
-      select: false,
     },
 
     isVerified: {
@@ -126,25 +115,18 @@ const UserSchema = new Schema<UserDocument>(
   }
 );
 
+UserSchema.index(
+  { oauthProvider: 1, oauthId: 1 },
+  { unique: true, sparse: true }
+);
+
+// Instance methods
 UserSchema.methods.incrementBlogCount = async function () {
   this.blogCount += 1;
   await this.save();
 };
 
-UserSchema.statics.usernameExists = async function (username: string) {
-  return await this.exists({
-    username,
-    isVerified: true,
-  });
-};
-
-UserSchema.statics.emailExists = async function (email: string) {
-  return await this.exists({
-    email,
-    isVerified: true,
-  });
-};
-
+// Mongoose middlewares
 UserSchema.pre("validate", function (next) {
   if (!this.oauthProvider && (!this.email || !this.password)) {
     this.invalidate("email", "Email is required if OAuth is not used.");
@@ -161,8 +143,8 @@ UserSchema.pre("validate", function (next) {
   next();
 });
 
+// Create and export the User model
 const User =
-  (models.User as Model<UserDocument>) ||
-  model<UserDocument>("User", UserSchema);
+  (models.User as Model<UserInf>) || model<UserInf>("User", UserSchema);
 
 export default User;
