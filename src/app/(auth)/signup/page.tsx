@@ -28,11 +28,17 @@ import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
 import Title from "@/components/title";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
+  // States
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showConfirmPassword, setShowConfirmPassword] =
     useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+
+  // AppRouter instance
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
@@ -45,9 +51,14 @@ export default function SignupPage() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof signupSchema>) {
+  async function onSubmit(values: z.infer<typeof signupSchema>) {
     try {
-      axios.post("/api/signup", values);
+      const res = await axios.post("/api/signup", values);
+      if (res.data.success) {
+        router.push("/login");
+      } else {
+        setError(res.data.message);
+      }
     } catch (error) {
       if (axios.isAxiosError(error))
         console.error("Axios error:", error.response?.data || error.message);
@@ -66,6 +77,12 @@ export default function SignupPage() {
           <hr />
         </CardHeader>
         <CardContent>
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-md text-sm">
+              {error}
+            </div>
+          )}
+
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="w-full">
               <FormField
@@ -160,7 +177,6 @@ export default function SignupPage() {
                         />
                         <button
                           type="button"
-                          tabIndex={-1}
                           className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                         >
                           {showPassword ? (
@@ -205,7 +221,6 @@ export default function SignupPage() {
                         />
                         <button
                           type="button"
-                          tabIndex={-1}
                           className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                         >
                           {showConfirmPassword ? (
