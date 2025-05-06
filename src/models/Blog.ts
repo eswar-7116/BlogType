@@ -1,18 +1,26 @@
-import { HydratedDocument, Schema, Model, model, models } from "mongoose";
+import { Schema, Model, model, models, Types } from "mongoose";
 import User from "./User";
 
-export type BlogDocument = HydratedDocument<{
+// Define the Blog interface
+export interface BlogInf {
   blogId: string;
   title: string;
-  authorId: Schema.Types.ObjectId;
+  authorId: Types.ObjectId;
   readTime: number;
   reads: number;
   likes: number;
   tags: string[];
   createdAt: Date;
-}>;
+}
 
-const BlogSchema = new Schema<BlogDocument>(
+// Define the instance methods
+interface BlogMethods {
+  incrementReads(): Promise<void>;
+  incrementLikes(): Promise<void>;
+  decrementLikes(): Promise<void>;
+}
+
+const BlogSchema = new Schema<BlogInf, BlogMethods>(
   {
     blogId: {
       type: String,
@@ -61,23 +69,25 @@ const BlogSchema = new Schema<BlogDocument>(
   }
 );
 
-BlogSchema.methods.incrementReads = function () {
+// Instance methods
+BlogSchema.methods.incrementReads = async function () {
   this.reads += 1;
-  this.save();
+  await this.save();
 };
 
-BlogSchema.methods.incrementLikes = function () {
+BlogSchema.methods.incrementLikes = async function () {
   this.likes += 1;
-  this.save();
+  await this.save();
 };
 
-BlogSchema.methods.decrementLikes = function () {
+BlogSchema.methods.decrementLikes = async function () {
   if (this.likes > 0) {
     this.likes -= 1;
-    this.save();
+    await this.save();
   }
 };
 
+// Mongoose middlewares
 BlogSchema.post("save", async (blog) => {
   try {
     await User.findByIdAndUpdate(blog.authorId, {
@@ -93,8 +103,8 @@ BlogSchema.post("save", async (blog) => {
   }
 });
 
+// Create and export the Blog model
 const Blog =
-  (models.Blog as Model<BlogDocument>) ||
-  model<BlogDocument>("Blog", BlogSchema);
+  (models.Blog as Model<BlogInf>) || model<BlogInf>("Blog", BlogSchema);
 
 export default Blog;
