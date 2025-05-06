@@ -1,7 +1,7 @@
 export async function POST(request: Request) {
-    const reqBody = await request.json();
+  const reqBody = await request.json();
 
-    return Response.json({
-        req: reqBody
-    })
+  return Response.json({
+    req: reqBody,
+  });
 }
