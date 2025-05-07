@@ -1,10 +1,14 @@
 import { z } from "zod";
-import { passwordValidation, usernameValidation } from "./common";
+import { passwordValidation } from "./common";
 
 const loginSchema = z
   .object({
     // Username login (optional, part of traditional login)
-    username: usernameValidation.optional(),
+    username: z
+      .string()
+      .min(2, "Username/E-mail must be atleast 2 characters")
+      .trim()
+      .optional(),
 
     // Email login (optional, part of traditional login)
     email: z.string().email("Invalid email address").trim().optional(),
