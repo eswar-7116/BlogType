@@ -14,7 +14,7 @@ export async function POST(request: Request) {
       return Response.json(
         {
           success: false,
-          message: "Bad data",
+          message: "Bad data.",
           error: parsedData.error.flatten(),
         },
         { status: 400 }
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
       return Response.json(
         {
           success: false,
-          message: "Internal server error",
+          message: "Internal server error.",
         },
         {
           status: 500,
