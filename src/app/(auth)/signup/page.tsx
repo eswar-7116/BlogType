@@ -55,14 +55,24 @@ export default function SignupPage() {
     try {
       const res = await axios.post("/api/signup", values);
       if (res.data.success) {
+        setError("");
         router.push("/login");
       } else {
         setError(res.data.message);
       }
     } catch (error) {
-      if (axios.isAxiosError(error))
-        console.error("Axios error:", error.response?.data || error.message);
-      else console.error("Unexpected error:", error);
+      if (axios.isAxiosError(error)) {
+        const errorMessage = error.response?.data || error.message;
+        console.error("Axios error:", errorMessage);
+        setError(
+          typeof errorMessage === "string"
+            ? errorMessage
+            : errorMessage?.message || "Internal server error"
+        );
+      } else {
+        console.error("Unexpected error:", error);
+        setError("Unexpected error occurred. Please try again.");
+      }
     }
   }
 
@@ -151,7 +161,7 @@ export default function SignupPage() {
                       />
                     </FormControl>
                     <FormDescription>
-                      We'll send a verification OTP to this email.
+                      We&apos;ll send a verification OTP to this email.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
