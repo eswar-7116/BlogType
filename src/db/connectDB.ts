@@ -12,8 +12,13 @@ export default async function connectDB() {
     return;
   }
 
+  if (!process.env.DATABASE_URL) {
+    console.error("DATABASE_URL is not defined in .env");
+    process.exit(1);
+  }
+
   try {
-    const db = await connect(process.env.DATABASE_URL || "");
+    const db = await connect(process.env.DATABASE_URL);
     connection.isConnected = db.connection.readyState;
     console.log("Successfully connected to the DB");
   } catch (error) {
