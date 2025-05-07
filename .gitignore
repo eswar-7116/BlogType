@@ -44,3 +44,6 @@ next-env.d.ts
 .vscode
 .idea
 .idx
+
+# Hidden routes (For development and testing)
+-test
