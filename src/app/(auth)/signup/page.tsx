@@ -89,11 +89,11 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-5">
-      <Title className="text-7xl mb-10" />
-      <Card className="w-120 shadow-lg">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4 md:py-5">
+      <Title className="text-4xl md:text-6xl lg:text-7xl mb-6 md:mb-10" />
+      <Card className="w-full max-w-md md:max-w-lg shadow-lg">
         <CardHeader>
-          <CardTitle className="text-center text-xl mb-2">
+          <CardTitle className="text-center text-lg md:text-xl mb-2">
             {isSuccess ? "Registration Successful" : "Create an account"}
           </CardTitle>
           <hr />
@@ -106,21 +106,21 @@ export default function SignupPage() {
           )}
 
           {isSuccess ? (
-            <div className="flex flex-col items-center justify-center py-8">
-              <div className="mb-6 text-green-600">
-                <CheckCircle2 size={64} />
+            <div className="flex flex-col items-center justify-center py-4 md:py-8">
+              <div className="mb-4 md:mb-6 text-green-600">
+                <CheckCircle2 size={48} className="md:h-16 md:w-16" />
               </div>
-              <h3 className="text-xl font-semibold mb-4 text-center">
+              <h3 className="text-lg md:text-xl font-semibold mb-3 md:mb-4 text-center">
                 Account Created Successfully!
               </h3>
-              <p className="text-center mb-6 text-gray-400">
+              <p className="text-center mb-4 md:mb-6 text-gray-400 text-sm md:text-base">
                 We've sent a verification link to your email address. Please
                 check your inbox and verify your account.
               </p>
               <Button
                 onClick={handleLoginRedirect}
                 className="flex items-center justify-center cursor-pointer gap-2 w-full max-w-xs will-change-transform transition-transform duration-300
-                hover:scale-105 hover:animate-[pulse_1s_ease-in-out_forwards] active:scale-95"
+                hover:scale-105 active:scale-95"
               >
                 <LogIn size={18} /> Proceed to Login
               </Button>
@@ -132,22 +132,22 @@ export default function SignupPage() {
                   control={form.control}
                   name="fullName"
                   render={({ field }) => (
-                    <FormItem className="mb-4">
-                      <FormLabel>
-                        <User /> Full Name
+                    <FormItem className="mb-3 md:mb-4">
+                      <FormLabel className="flex items-center gap-1 text-sm">
+                        <User size={16} /> Full Name
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="John Doe"
                           {...field}
-                          className="h-10"
+                          className="h-9 md:h-10"
                           required
                         />
                       </FormControl>
-                      <FormDescription>
+                      <FormDescription className="text-xs md:text-sm">
                         Enter your full name as it will appear on your profile.
                       </FormDescription>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -156,22 +156,22 @@ export default function SignupPage() {
                   control={form.control}
                   name="username"
                   render={({ field }) => (
-                    <FormItem className="mb-4">
-                      <FormLabel>
-                        <User /> Username
+                    <FormItem className="mb-3 md:mb-4">
+                      <FormLabel className="flex items-center gap-1 text-sm">
+                        <User size={16} /> Username
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="johndoe"
                           {...field}
-                          className="h-10"
+                          className="h-9 md:h-10"
                           required
                         />
                       </FormControl>
-                      <FormDescription>
+                      <FormDescription className="text-xs md:text-sm">
                         Choose a unique username for your account.
                       </FormDescription>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -180,23 +180,23 @@ export default function SignupPage() {
                   control={form.control}
                   name="email"
                   render={({ field }) => (
-                    <FormItem className="mb-4">
-                      <FormLabel>
-                        <Mail /> E-mail
+                    <FormItem className="mb-3 md:mb-4">
+                      <FormLabel className="flex items-center gap-1 text-sm">
+                        <Mail size={16} /> E-mail
                       </FormLabel>
                       <FormControl>
                         <Input
                           placeholder="johndoe@example.com"
                           type="email"
                           {...field}
-                          className="h-10"
+                          className="h-9 md:h-10"
                           required
                         />
                       </FormControl>
-                      <FormDescription>
+                      <FormDescription className="text-xs md:text-sm">
                         We&apos;ll send a verification OTP to this email.
                       </FormDescription>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -205,16 +205,16 @@ export default function SignupPage() {
                   control={form.control}
                   name="password"
                   render={({ field }) => (
-                    <FormItem className="mb-4">
-                      <FormLabel>
-                        <RectangleEllipsis /> Password
+                    <FormItem className="mb-3 md:mb-4">
+                      <FormLabel className="flex items-center gap-1 text-sm">
+                        <RectangleEllipsis size={16} /> Password
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Input
                             placeholder="••••••••••••••••"
                             {...field}
-                            className="h-10 pr-10"
+                            className="h-9 md:h-10 pr-10"
                             required
                             type={showPassword ? "text" : "password"}
                           />
@@ -224,11 +224,13 @@ export default function SignupPage() {
                           >
                             {showPassword ? (
                               <EyeOff
+                                size={16}
                                 className="cursor-pointer"
                                 onClick={() => setShowPassword((prev) => !prev)}
                               />
                             ) : (
                               <Eye
+                                size={16}
                                 className="cursor-pointer"
                                 onClick={() => setShowPassword((prev) => !prev)}
                               />
@@ -236,11 +238,11 @@ export default function SignupPage() {
                           </button>
                         </div>
                       </FormControl>
-                      <FormDescription>
+                      <FormDescription className="text-xs md:text-sm">
                         Use at least 8 characters, including a number and a
                         symbol.
                       </FormDescription>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -249,16 +251,16 @@ export default function SignupPage() {
                   control={form.control}
                   name="confirmPassword"
                   render={({ field }) => (
-                    <FormItem className="mb-4">
-                      <FormLabel>
-                        <RectangleEllipsis /> Confirm Password
+                    <FormItem className="mb-3 md:mb-4">
+                      <FormLabel className="flex items-center gap-1 text-sm">
+                        <RectangleEllipsis size={16} /> Confirm Password
                       </FormLabel>
                       <FormControl>
                         <div className="relative">
                           <Input
                             placeholder="••••••••••••••••"
                             {...field}
-                            className="h-10 pr-10"
+                            className="h-9 md:h-10 pr-10"
                             required
                             type={showConfirmPassword ? "text" : "password"}
                           />
@@ -268,6 +270,7 @@ export default function SignupPage() {
                           >
                             {showConfirmPassword ? (
                               <EyeOff
+                                size={16}
                                 className="cursor-pointer"
                                 onClick={() =>
                                   setShowConfirmPassword((prev) => !prev)
@@ -275,6 +278,7 @@ export default function SignupPage() {
                               />
                             ) : (
                               <Eye
+                                size={16}
                                 className="cursor-pointer"
                                 onClick={() =>
                                   setShowConfirmPassword((prev) => !prev)
@@ -284,11 +288,11 @@ export default function SignupPage() {
                           </button>
                         </div>
                       </FormControl>
-                      <FormDescription>
+                      <FormDescription className="text-xs md:text-sm">
                         Use at least 8 characters, including a number and a
                         symbol.
                       </FormDescription>
-                      <FormMessage />
+                      <FormMessage className="text-xs" />
                     </FormItem>
                   )}
                 />
@@ -297,7 +301,7 @@ export default function SignupPage() {
                   type="submit"
                   disabled={isLoading}
                   className="cursor-pointer will-change-transform transition-transform duration-300
-                  w-25 h-10 mt-8 mx-auto block hover:scale-105 hover:animate-[pulse_1s_ease-in-out_forwards]
+                  w-full md:w-auto md:px-8 h-10 mt-6 md:mt-8 mx-auto block hover:scale-105
                   active:scale-95 flex items-center justify-center gap-2"
                 >
                   {isLoading ? (
@@ -306,7 +310,7 @@ export default function SignupPage() {
                     </>
                   ) : (
                     <>
-                      <CircleUserRound /> Sign Up
+                      <CircleUserRound size={18} /> Sign Up
                     </>
                   )}
                 </Button>
@@ -315,7 +319,7 @@ export default function SignupPage() {
           )}
 
           {!isSuccess && (
-            <p className="flex-col mt-2 text-center">
+            <p className="text-sm md:text-base mt-4 text-center">
               Already have an account?&nbsp;
               <Link href="/login" className="text-blue-600 hover:underline">
                 Login
