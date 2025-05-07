@@ -27,6 +27,7 @@ export async function POST(request: Request) {
       User.findOne({ email: data.email }),
     ]);
 
+    // Check if the username exists
     if (existingUsername?.isVerified) {
       return Response.json({
         success: false,
@@ -35,6 +36,7 @@ export async function POST(request: Request) {
       });
     }
 
+    // Check if the email is already registered
     if (existingEmail?.isVerified) {
       return Response.json({
         success: false,
@@ -56,7 +58,7 @@ export async function POST(request: Request) {
 
     if (existingUsername && !existingUsername.isVerified) {
       await updateUser(existingUsername);
-    } else if (existingEmail && existingEmail.isVerified) {
+    } else if (existingEmail && !existingEmail.isVerified) {
       await updateUser(existingEmail);
     } else {
       new User({
