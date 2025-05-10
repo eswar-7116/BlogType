@@ -114,8 +114,8 @@ export default function SignupPage() {
                 Account Created Successfully!
               </h3>
               <p className="text-center mb-4 md:mb-6 text-gray-400 text-sm md:text-base">
-                We've sent a verification link to your email address. Please
-                check your inbox and verify your account.
+                We&apos;ve sent a verification link to your email address.
+                Please check your inbox and verify your account.
               </p>
               <Button
                 onClick={handleLoginRedirect}

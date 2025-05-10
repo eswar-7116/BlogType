@@ -1,5 +1,3 @@
-import Title from "@/components/title";
-
 export default function VerifyLinkMail({
   link,
   name,
@@ -54,7 +52,7 @@ export default function VerifyLinkMail({
       </table>
 
       <p className="text-sm text-gray-600 mb-2">
-        If you didn't request this, you can safely ignore this email.
+        If you didn&apos;t request this, you can safely ignore this email.
       </p>
     </div>
   );
